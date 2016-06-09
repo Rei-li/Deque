@@ -138,6 +138,7 @@ namespace Deque
                         FirstNode = null;
                     }
                     LastNode = LastNode.Previous;
+                    LastNode.Next = null;
                     Count--;
                 }
                 else
@@ -175,6 +176,7 @@ namespace Deque
                         LastNode = null;
                     }
                     FirstNode = FirstNode.Next;
+                    FirstNode.Previous = null;
                     Count--;
                 }
                 else

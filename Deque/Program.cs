@@ -200,8 +200,17 @@ namespace Deque
                         if (commandElements.Count >= 2)
                         {
                             var name = commandElements[1];
-                            var value = PopFront(name);
-                            Console.WriteLine(value);
+                            try
+                            {
+                                var value = PopFront(name);
+                                Console.WriteLine(value);
+                            }
+                            catch (EmptyDequeException ex)
+                            {
+                                Console.WriteLine(ex.Message);
+                            }
+                            
+                            
                         }
                         else
                         {
@@ -214,8 +223,16 @@ namespace Deque
                         if (commandElements.Count >= 2)
                         {
                             var name = commandElements[1];
-                            var value = PopBack(name);
-                            Console.WriteLine(value);
+                            try
+                            {
+                                var value = PopBack(name);
+                                Console.WriteLine(value);
+                            }
+                            catch (EmptyDequeException ex)
+                            {
+                                Console.WriteLine(ex.Message);
+                            }
+                            
                         }
                         else
                         {
@@ -228,8 +245,16 @@ namespace Deque
                         if (commandElements.Count >= 2)
                         {
                             var name = commandElements[1];
-                            var value = PeekBack(name);
-                            Console.WriteLine(value);
+                            try
+                            {
+                                var value = PeekBack(name);
+                                Console.WriteLine(value);
+                            }
+                            catch (EmptyDequeException ex)
+                            {
+                                Console.WriteLine(ex.Message);
+                            }
+                            
                         }
                         else
                         {
@@ -242,8 +267,16 @@ namespace Deque
                         if (commandElements.Count >= 2)
                         {
                             var name = commandElements[1];
-                            var value = PeekFront(name);
-                            Console.WriteLine(value);
+                            try
+                            {
+                                var value = PeekFront(name);
+                                Console.WriteLine(value);
+                            }
+                            catch (EmptyDequeException ex)
+                            {
+                                Console.WriteLine(ex.Message);
+                            }
+                            
                         }
                         else
                         {
