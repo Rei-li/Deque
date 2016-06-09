@@ -8,167 +8,352 @@ namespace Deque
 {
     class Program
     {
+        private static Dictionary<string, Deque<string>> deques = new Dictionary<string, Deque<string>>();
+        private const string WRONG_DEQUE_NAME_MSG = "Wrong deque name";
 
-        static void Main(string[] args)
+        private static void CreateDeque(string name)
         {
-            //var deque = new Deque<int>();
-
-            //deque.OnChanged += deque_OnChanged;
-
-            //deque.PushBack(5);
-            //deque.PushBack(6);
-            //deque.PushFront(4);
-            //deque.PushBack(7);
-            //deque.PushFront(3);
-            //deque.PushBack(8);
-            //deque.PushFront(2);
-            //deque.PushBack(9);
-            //deque.PushFront(1);
-
-            //var c = deque.Contains(4);
-            //Console.WriteLine("deque.Contains(4): "+ c);
-
-            //while (deque.Count> 0)
-            //{
-            //    Console.WriteLine(deque.PopFront());
-            //}
-
-            //var deque2 = new Deque<int>();
-            //deque2.OnChanged += deque_OnChanged;
-            //deque2.PushBack(5);
-            //deque2.PushBack(6);
-            //deque2.PushFront(4);
-            //deque2.PushBack(7);
-            //deque2.PushFront(3);
-            //deque2.PushBack(8);
-            //deque2.PushFront(2);
-            //deque2.PushBack(9);
-            //deque2.PushFront(1);
-
-            //while (deque2.Count > 0)
-            //{
-            //    Console.WriteLine(deque2.PopBack());
-            //}
-
-            var deque3 = new Deque<int>();
-            deque3.OnChanged += deque_OnChanged;
-            deque3.PushBack(5);
-            deque3.PushBack(6);
-            deque3.PushFront(4);
-            deque3.PushBack(7);
-            deque3.PushFront(3);
-            deque3.PushBack(8);
-            deque3.PushFront(2);
-            deque3.PushBack(9);
-            deque3.PushFront(1);
-
-            while (deque3.Count > 0)
-            {
-                Console.WriteLine(deque3.PopFront());
-               if(deque3.Count != 0)
-                Console.WriteLine(deque3.PopBack());
-            }
-
-
-            //Console.WriteLine();
-            //Console.WriteLine();
-
-
-
-            //var deque4 = new Deque<string>();
-            //deque4.PushBack("e");
-            //deque4.PushBack("f");
-            //deque4.PushFront("d");
-            //deque4.PushBack("g");
-            //deque4.PushFront("c");
-            //deque4.PushBack("h");
-            //deque4.PushFront("b");
-            //deque4.PushBack("i");
-            //deque4.PushFront("a");
-
-            //var cstr = deque4.Contains("g");
-            //Console.WriteLine("deque.Contains(g): " + cstr);
-
-            //var cstrv = deque4.Contains("v");
-            //Console.WriteLine("deque.Contains(v): " + cstrv);
-
-            //while (deque4.Count > 0)
-            //{
-            //    Console.WriteLine(deque4.PopFront());
-            //}
-
-            //var deque5 = new Deque<string>();
-            //deque5.PushBack("e");
-            //deque5.PushBack("f");
-            //deque5.PushFront("d");
-            //deque5.PushBack("g");
-            //deque5.PushFront("c");
-            //deque5.PushBack("h");
-            //deque5.PushFront("b");
-            //deque5.PushBack("i");
-            //deque5.PushFront("a");
-
-            //while (deque5.Count > 0)
-            //{
-            //    Console.WriteLine(deque5.PopBack());
-            //}
-
-            var deque6 = new Deque<string>();
-
-            deque6.OnChanged += deque6_OnChanged;
-            deque6.PushBack("e");
-            deque6.PushBack("f");
-            deque6.PushFront("d");
-            deque6.PushBack("g");
-            deque6.PushFront("c");
-            deque6.PushBack("h");
-            deque6.PushFront("b");
-            deque6.PushBack("i");
-            deque6.PushFront("a");
-
-            Console.WriteLine(deque6.Count);
-            Console.WriteLine();
-
-            var deque7 = deque6.Clone();
-
-            while (deque6.Count > 0)
-            {
-                Console.WriteLine(deque6.Count);
-                Console.WriteLine(deque6.PopFront());
-                Console.WriteLine(deque6.Count);
-                if (deque6.Count > 0)
-                {
-                    Console.WriteLine(deque6.PopBack());
-                    Console.WriteLine(deque6.Count);
-                    Console.WriteLine();
-                }
-            }
-
-
-
-
-            Console.WriteLine();
-            Console.WriteLine();
-
-            Console.WriteLine(deque6.Count);
-            Console.WriteLine(deque7.Count);
-            Console.WriteLine();
-            Console.WriteLine(deque7.PeekFront());
-            Console.WriteLine(deque7.PeekBack());
-
-
-
-
+            var deque = new Deque<string>();
+            deque.OnChanged += deque_OnChanged;
+            deques.Add(name, deque);
         }
 
-        static void deque6_OnChanged(object source, DequeEventArgs<string> e)
+        static void deque_OnChanged(object source, DequeEventArgs<string> e)
         {
             Console.WriteLine(e.GetChangeDequeType() + ": " + e.GetValue());
         }
 
-        static void deque_OnChanged(object source, DequeEventArgs<int> e)
+        private static void PushBack(string name, string value)
         {
-            Console.WriteLine(e.GetChangeDequeType()+ ": " + e.GetValue());
+            Deque<string> deque;
+            if (deques.TryGetValue(name, out deque))
+            {
+                deque.PushBack(value);
+            }
         }
+
+        private static void PushFront(string name, string value)
+        {
+            Deque<string> deque;
+            if (deques.TryGetValue(name, out deque))
+            {
+                deque.PushFront(value);
+            }
+        }
+
+        private static string PopFront(string name)
+        {
+            Deque<string> deque;
+            if (deques.TryGetValue(name, out deque))
+            {
+                return deque.PopFront();
+            }
+            return null;
+        }
+
+        private static string PopBack(string name)
+        {
+            Deque<string> deque;
+            if (deques.TryGetValue(name, out deque))
+            {
+               return deque.PopBack();
+            }
+            return null;
+        }
+
+        private static string PeekBack(string name)
+        {
+            Deque<string> deque;
+            if (deques.TryGetValue(name, out deque))
+            {
+                return deque.PeekBack();
+            }
+            return null;
+        }
+
+        private static string PeekFront(string name)
+        {
+            Deque<string> deque;
+            if (deques.TryGetValue(name, out deque))
+            {
+                return deque.PeekFront();
+            }
+            return null;
+        }
+
+        private static void Clear(string name)
+        {
+            Deque<string> deque;
+            if (deques.TryGetValue(name, out deque))
+            {
+                 deque.Clear();
+            }
+        }
+
+        private static int? GetCount(string name)
+        {
+            Deque<string> deque;
+            if (deques.TryGetValue(name, out deque))
+            {
+               return deque.Count;
+            }
+            return null;
+        }
+
+        private static bool Contains(string name, string value)
+        {
+            Deque<string> deque;
+            if (deques.TryGetValue(name, out deque))
+            {
+                return deque.Contains(value);
+            }
+            return false;
+        }
+
+        private static void Clone(string name, string newName)
+        {
+            Deque<string> deque;
+            if (deques.TryGetValue(name, out deque))
+            {
+                var newDeque = deque.Clone();
+                newDeque.OnChanged += deque_OnChanged;
+                deques.Add(newName, newDeque); 
+            }
+        }
+
+        private static string[] ToArray(string name)
+        {
+            Deque<string> deque;
+            if (deques.TryGetValue(name, out deque))
+            {
+                return deque.ToArray();
+            }
+            return null;
+        }
+
+
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Welcome to testing program for Deque class. Please use -help command to see the list of available commands");
+            RunCommand();
+        }
+
+        private static void RunCommand()
+        {
+            var command = Console.ReadLine();
+            List<string> commandElements = new List<string>();
+            if (command != null)
+            {
+                commandElements = command.Split(' ').ToList();
+            }
+
+
+            if (commandElements.Any())
+            {
+                switch (commandElements[0])
+                {
+                    case "create":
+                        if (commandElements.Count >= 2 && !deques.ContainsKey(commandElements[1]))
+                        {
+                            var name = commandElements[1];
+                            CreateDeque(name);
+                            Console.WriteLine(name + " was created");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Wrong deque name. Name should be unique and not empty");
+                        }
+                        RunCommand();
+                        break;
+
+                    case "pushb":
+                        if (commandElements.Count >= 3)
+                        {
+                            var name = commandElements[1];
+                            var value = commandElements[2];
+                            PushBack(name, value);
+                            Console.WriteLine(value + " was added to " + name);
+                        }
+                        else
+                        {
+                            Console.WriteLine(WRONG_DEQUE_NAME_MSG);
+                        }
+                        RunCommand();
+                        break;
+
+                    case "pushf":
+                        if (commandElements.Count >= 3)
+                        {
+                            var name = commandElements[1];
+                            var value = commandElements[2];
+                            PushFront(name, value);
+                            Console.WriteLine(value + " was added to " + name);
+                        }
+                        else
+                        {
+                            Console.WriteLine(WRONG_DEQUE_NAME_MSG);
+                        }
+                        RunCommand();
+                        break;
+
+                    case "popf":
+                        if (commandElements.Count >= 2)
+                        {
+                            var name = commandElements[1];
+                            var value = PopFront(name);
+                            Console.WriteLine(value);
+                        }
+                        else
+                        {
+                            Console.WriteLine(WRONG_DEQUE_NAME_MSG);
+                        }
+                        RunCommand();
+                        break;
+
+                    case "popb":
+                        if (commandElements.Count >= 2)
+                        {
+                            var name = commandElements[1];
+                            var value = PopBack(name);
+                            Console.WriteLine(value);
+                        }
+                        else
+                        {
+                            Console.WriteLine(WRONG_DEQUE_NAME_MSG);
+                        }
+                        RunCommand();
+                        break;
+
+                    case "peekb":
+                        if (commandElements.Count >= 2)
+                        {
+                            var name = commandElements[1];
+                            var value = PeekBack(name);
+                            Console.WriteLine(value);
+                        }
+                        else
+                        {
+                            Console.WriteLine(WRONG_DEQUE_NAME_MSG);
+                        }
+                        RunCommand();
+                        break;
+
+                    case "peekf":
+                        if (commandElements.Count >= 2)
+                        {
+                            var name = commandElements[1];
+                            var value = PeekFront(name);
+                            Console.WriteLine(value);
+                        }
+                        else
+                        {
+                            Console.WriteLine(WRONG_DEQUE_NAME_MSG);
+                        }
+                        RunCommand();
+                        break;
+
+                    case "clear":
+                        if (commandElements.Count >= 2)
+                        {
+                            var name = commandElements[1];
+                            Clear(name);
+                            Console.WriteLine(name + " was cleared");
+                        }
+                        else
+                        {
+                            Console.WriteLine(WRONG_DEQUE_NAME_MSG);
+                        }
+                        RunCommand();
+                        break;
+
+                    case "count":
+                        if (commandElements.Count >= 2)
+                        {
+                            var name = commandElements[1];
+                            var value = GetCount(name);
+                            Console.WriteLine(name + " count: " + value);
+                        }
+                        else
+                        {
+                            Console.WriteLine(WRONG_DEQUE_NAME_MSG);
+                        }
+                        RunCommand();
+                        break;
+
+                    case "contain":
+                        if (commandElements.Count >= 3)
+                        {
+                            var name = commandElements[1];
+                            var value = commandElements[2];
+                            Console.WriteLine(name + " contains " + value + ": " + Contains(name, value).ToString());
+                        }
+                        else
+                        {
+                            Console.WriteLine(WRONG_DEQUE_NAME_MSG);
+                        }
+                        RunCommand();
+                        break;
+
+                    case "clone":
+                        if (commandElements.Count >= 3 && !deques.ContainsKey(commandElements[2]))
+                        {
+                            var name = commandElements[1];
+                            var newName = commandElements[2];
+                            Clone(name, newName);
+                            Console.WriteLine(newName + " was created");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Wrong deque name. Name should be unique and not empty");
+                        }
+                        RunCommand();
+                        break;
+
+                    case "arr":
+                        if (commandElements.Count >= 2)
+                        {
+                            var name = commandElements[1];
+                            var arr = ToArray(name);
+                            foreach (var item in arr)
+                            {
+                                Console.WriteLine(item);
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine(WRONG_DEQUE_NAME_MSG);
+                        }
+                        RunCommand();
+                        break;
+
+                    case "q": break;
+                    case "-help": 
+                        Console.WriteLine("create DequeName - creates new deque");
+                        Console.WriteLine("pushb DequeName Value - push value to the end of the deque");
+                        Console.WriteLine("pushf DequeName Value - push value to the begining of the deque");
+                        Console.WriteLine("popf DequeName - get value of the first element of the deque");
+                        Console.WriteLine("popb DequeName - get value of the last element of the deque");
+                        Console.WriteLine("peekf DequeName - get value of the first element of the deque (deque not changes)");
+                        Console.WriteLine("peekb DequeName  - get value of the last element of the deque (deque not changes)");
+                        Console.WriteLine("clear DequeName - clear deque");
+                        Console.WriteLine("count DequeName - get count of elements of the deque contains such value");
+                        Console.WriteLine("contain DequeName Value - check if the deque");
+                        Console.WriteLine("clone DequeName NewDequeName - create new deque with values from the current one");
+                        Console.WriteLine("arr DequeName - create new array with values from the deque and display all values ");
+                        Console.WriteLine("-help - display all available commands ");
+                        Console.WriteLine("q - exit ");
+                        RunCommand();
+                        break;
+
+                    default: Console.WriteLine("Wrong command");
+                        RunCommand();
+                        break;
+                }
+            }
+            
+        }
+
+      
+        
     }
 }

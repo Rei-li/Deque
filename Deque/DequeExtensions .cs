@@ -8,27 +8,28 @@ namespace Deque
 {
     public static class DequeExtensions
     {
-        public static Deque<T> Clone<T>(this Deque<T> deque)
+        /// <summary>
+        /// Copy deque values to array
+        /// </summary>
+        /// <typeparam name="T">type of values</typeparam>
+        /// <param name="deque">deque to copy to array</param>
+        /// <returns>array with deque values</returns>
+        public static T[] ToArray<T>(this Deque<T> deque)
         {
-            var newDeque = new Deque<T>();
-            if (deque.FirstNode != null)
+            var newDeque = deque.Clone();
+            var arr = new T[newDeque.Count];
+
+            var i = 0;
+            while (newDeque.Count > 0)
             {
-                var node = deque.FirstNode;
-                     
-                while (true)
-                {
-                    newDeque.PushBack(node.Value);
-                    if (node.Next != null)
-                    {
-                        node = node.Next;
-                        continue;
-                    }
-                    break;
-                }
+                arr[i] = newDeque.PopFront();
+                i++;
             }
-            return newDeque;
+
+            return arr;
         }
 
-       
+
+
     }
 }

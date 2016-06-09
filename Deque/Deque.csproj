@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="Deque.cs" />
     <Compile Include="DequeExtensions .cs" />
+    <Compile Include="EmptyDequeException.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

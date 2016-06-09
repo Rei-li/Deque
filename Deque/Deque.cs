@@ -39,22 +39,28 @@ namespace Deque
     public enum ChangeDequeType { PushedBack, PushedFront, PoppedBack, PoppedFront };
 
 
-    public class Node<T>
-    {
-        public T Value { set; get; }
-        public Node<T> Next { set; get; }
-        public Node<T> Previous { set; get; }
 
-    }
 
     public class Deque<T>
     {
+        private class Node<TNode> where TNode : T
+        {
+            public TNode Value { set; get; }
+            public Node<TNode> Next { set; get; }
+            public Node<TNode> Previous { set; get; }
+
+        }
+
         private const string EMPTY_DEQUE_MSG = "Deque is empty";
         public event DequeEventHandler<T> OnChanged;
-        public Node<T> FirstNode { set; get; }
-        public Node<T> LastNode { set; get; }
+        private Node<T> FirstNode { set; get; }
+        private Node<T> LastNode { set; get; }
         public int Count { get; private set; }
 
+        /// <summary>
+        /// Add value to the end of the deque
+        /// </summary>
+        /// <param name="item">value to add</param>
         public void PushBack(T item)
         {
             Node<T> newNode = new Node<T>()
@@ -83,6 +89,10 @@ namespace Deque
         }
 
 
+        /// <summary>
+        /// Add value to the begining of the deque
+        /// </summary>
+        /// <param name="item">value to add</param>
         public void PushFront(T item)
         {
             Node<T> newNode = new Node<T>()
@@ -111,6 +121,10 @@ namespace Deque
         }
 
 
+        /// <summary>
+        /// Get last element of the deque
+        /// </summary>
+        /// <returns>the last deque element</returns>
         public T PopBack()
         {
             if (LastNode != null)
@@ -139,10 +153,15 @@ namespace Deque
             }
             else
             {
-                throw new IndexOutOfRangeException(EMPTY_DEQUE_MSG);
+                throw new EmptyDequeException(EMPTY_DEQUE_MSG);
             }
         }
 
+
+        /// <summary>
+        /// Get vallue of the first element of the deque
+        /// </summary>
+        /// <returns>the first deque element</returns>
         public T PopFront()
         {
             if (FirstNode != null)
@@ -172,11 +191,14 @@ namespace Deque
             }
             else
             {
-                throw new IndexOutOfRangeException(EMPTY_DEQUE_MSG);
+                throw new EmptyDequeException(EMPTY_DEQUE_MSG);
             }
         }
 
-
+        /// <summary>
+        /// Get the last value but not change deque
+        /// </summary>
+        /// <returns>value of the last element</returns>
         public T PeekBack()
         {
             if (LastNode != null)
@@ -185,10 +207,14 @@ namespace Deque
             }
             else
             {
-                throw new IndexOutOfRangeException(EMPTY_DEQUE_MSG);
+                throw new EmptyDequeException(EMPTY_DEQUE_MSG);
             }
         }
 
+        /// <summary>
+        /// Get the first value but not change deque
+        /// </summary>
+        /// <returns>value of the first element</returns>
         public T PeekFront()
         {
             if (FirstNode != null)
@@ -197,11 +223,14 @@ namespace Deque
             }
             else
             {
-                throw new IndexOutOfRangeException(EMPTY_DEQUE_MSG);
+                throw new EmptyDequeException(EMPTY_DEQUE_MSG);
             }
         }
 
 
+        /// <summary>
+        /// Clear deque 
+        /// </summary>
         public void Clear()
         {
             FirstNode = null;
@@ -210,15 +239,53 @@ namespace Deque
         }
 
 
+        /// <summary>
+        /// Check if deque contains an element with specific value
+        /// </summary>
+        /// <param name="item">value to find</param>
+        /// <returns>if value found - true, else - false</returns>
         public bool Contains(T item)
         {
-            return FirstNode != null && CheckNodeValueEqals(FirstNode, item);
+            if (FirstNode == null) return false;
+
+            var node = FirstNode;
+            while (true)
+            {
+                if (node.Value.Equals(item)) return true;
+                if (node.Next != null)
+                {
+                    node = node.Next;
+                    continue;
+                }
+                break;
+            }
+            return false;
         }
 
 
-        private static bool CheckNodeValueEqals(Node<T> node, T item)
+       
+
+        /// <summary>
+        /// Create new deque with the same values
+        /// </summary>
+        /// <returns>separate deque instnce with the same values</returns>
+        public  Deque<T> Clone()
         {
-            return node.Value.Equals(item) || node.Next != null && CheckNodeValueEqals(node.Next, item);
+            var newDeque = new Deque<T>();
+            if (FirstNode == null) return newDeque;
+            var node = FirstNode;
+
+            while (true)
+            {
+                newDeque.PushBack(node.Value);
+                if (node.Next != null)
+                {
+                    node = node.Next;
+                    continue;
+                }
+                break;
+            }
+            return newDeque;
         }
 
     }
